@@ -49,16 +49,22 @@
 
 @section scripts {
     <script>
+        //3 ways to pass info in async - .POST - .GET - .Ajax
+        //Ajax is asynchronous, jquery & Json
+
+
         $(document).ready(() => {
-            GetPlaylists();
+            GetPlaylists();//calls the function to load the playlists on load. No need for onclick event 
 
             function GetPlaylists() {
-                $.get({
-                    url: "@Url.Action("GetPlaylists", "Spotify")",
-                    success: (data) => {
-                        let playlistData = JSON.parse(data);
+                $.get({ //--------------------------------------------get
+                    url: "@Url.Action("/Spotify/GetPlaylists")", //another way to call the action 
 
-                        console.log(playlistData);
+                    success: (data) => { //basically if statement --------------- this is the lambda version 
+
+                        let playlistData = JSON.parse(data);//parse stringify's the playlist data into Json object
+
+                        console.log(playlistData);//check if this is working
 
                         $("#table-body").empty();
 
@@ -70,8 +76,8 @@
             }
 
             $("#add-playlist").on("click", () => {
-                $.post({
-                    url: "@Url.Action("AddPlaylist", "Spotify")",
+                $.post({//-------------------------------------------post
+                    url: "@Url.Action("AddPlaylist", "Spotify")",// used in class example for consistency
                     data: {
                         name: $("#playlist-name").val()
                     },
@@ -88,7 +94,7 @@
                 console.log($(this).attr("data-id"))
                 let id = parseInt($(this).attr("data-id"));
 
-                $.get({
+                $.get({//----------------------------------------------get
                     url: "@Url.Action("GetPlaylistTracks", "Spotify")",
                     data: {
                         id: id

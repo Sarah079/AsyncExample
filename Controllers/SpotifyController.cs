@@ -13,6 +13,8 @@ namespace AsyncExample.Controllers
         private readonly ChinookEntities db = new ChinookEntities();
 
         // GET: Spotify
+        //getting spotify list from async request in view 
+        //async is done in view with ajax/jquery
         public ActionResult Playlists()
         {
             return View();
@@ -20,8 +22,10 @@ namespace AsyncExample.Controllers
         
         public string GetPlaylists()
         {
-            object playlistData = db.Playlist.Select(p => new { ID = p.PlaylistId, p.Name, Tracks = p.Track.Count }).ToList();
+            //Select statements use object -->
+            object playlistData = db.Playlist.Select(p => new { ID = p.PlaylistId, p.Name, Tracks = p.Track.Count }).ToList(); //LinQ Lambda
 
+            //when using Async you have to communicate C# into Ajax using JsonConvert.SeriaizeObject 
             return JsonConvert.SerializeObject(playlistData);
         }
 
